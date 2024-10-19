@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AccessTransit</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <style>
+            :root {
+                --rem: 16;
+                --wix-font-stack: Madefor,"Helvetica Neue",Helvetica,Arial,"メイリオ",meiryo,"ヒラギノ角ゴ pro w3",hiragino kaku gothic pro,sans-serif;
+                --wix-font-weight-regular: 400;
+                --wix-font-weight-medium: 530;
+                --wix-font-weight-bold: 700;
+                --wix-font-weight-xbold: 800;
+            }
+
+            body {
+                font-family: var(--wix-font-stack);
+                font-weight: var(--wix-font-weight-regular);
+                background-color: #121212;
+                color: #E0E0E0;
+                font-size: 14px;
+                line-height: 1.6;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .navbar {
+                background-color: #1f1f1f;
+                font-weight: var(--wix-font-weight-bold);
+            }
+
+            .navbar-brand, .nav-link {
+                color: #E0E0E0 !important;
+            }
+
+            .jumbotron {
+                background-color: #1f1f1f;
+                color: #E0E0E0;
+                padding: 2rem 1rem;
+                text-align: center;
+                font-weight: var(--wix-font-weight-medium);
+                border-bottom: 3px solid #007bff;
+            }
+
+            .featurette {
+                padding: 3rem 0;
+                background-color: #181818;
+                border-radius: 10px;
+                margin-bottom: 2rem;
+            }
+
+            .featurette h2 {
+                color: #E0E0E0;
+                font-weight: var(--wix-font-weight-bold);
+            }
+
+            .featurette p {
+                color: #B0B0B0;
+            }
+
+            .featurette img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 10px;
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
+            }
+
+            footer {
+                font-weight: var(--wix-font-weight-xbold);
+                background-color: #000;
+                color: #E0E0E0;
+                padding: 2rem 0;
+                text-align: center;
+            }
+
+            footer a {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+            footer a:hover {
+                text-decoration: underline;
+            }
+
+            /* Emergency Assistance Button */
+            .btn-circle {
+                position: fixed;
+                top: 10px;
+                left: 20px;
+                z-index: 1000;
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                font-size: 16px;
+                text-align: center;
+                line-height: 60px;
+            }
+
+            /* Live Chat Button */
+            .fixed-bottom .btn-primary {
+                position: fixed;
+                bottom: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 1000;
+            }
+
+            #map {
+                width: 100%;
+                height: 400px;
+            }
+
+            /* Style for the chart container */
+            #chart-container {
+                width: 100%;
+                height: 400px;
+                margin: 2rem 0;
+                background-color: #222;
+                border-radius: 10px;
+                padding: 1rem;
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
+            }
+
+            /* Accessibility Features Section */
+            .accessibility-feature {
+                margin: 1rem 0;
+                padding: 1rem;
+                background-color: #222;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
+            }
+
+            .accessibility-feature img {
+                width: 50px;
+                height: 50px;
+                margin-right: 1rem;
+            }
+
+            .accessibility-feature h4 {
+                margin: 0;
+                color: #E0E0E0;
+            }
+
+            .accessibility-feature p {
+                margin: 0;
+                color: #B0B0B0;
+            }
+
+            /* Text-to-Speech Button Styles */
+            .tts-controls {
+                margin: 1rem 0;
+                text-align: center;
+            }
+
+            .tts-controls button {
+                padding: 0.75rem 1.5rem;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 0.25rem;
+                font-size: 1rem;
+                margin: 0.5rem;
+                cursor: pointer;
+            }
+
+            .tts-controls button:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Emergency Assistance Button -->
+        <button class="btn btn-danger btn-circle" onclick="callEmergency()">Help</button>
+
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Transport Info</a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="route-planner.html">Route Planner</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="accessibility-info.html">Accessibility Info</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="bus-routes.html">Bus Routes</a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-outline-light ms-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                        </li>
+                    </ul>
+                    <!-- Accessibility Settings Button -->
+                    <button class="btn btn-outline-light ms-2" data-bs-toggle="modal" data-bs-target="#accessibilitySettingsModal">Accessibility Settings</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Jumbotron -->
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-4">Welcome to Public Transportation Info</h1>
+                <p class="lead">Your go-to source for accessible public transportation information.</p>
+            </div>
+        </div>
+
+        <!-- Text-to-Speech Controls -->
+        <div class="tts-controls">
+            <button onclick="startSpeech()">Start Text-to-Speech</button>
+            <button onclick="stopSpeech()">Stop Text-to-Speech</button>
+        </div>
+
+       <!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #1f1f1f; color: #E0E0E0; border-radius: 10px; border: none; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);">
+            <div class="modal-header" style="border: none;">
+                <h5 class="modal-title" id="loginModalLabel" style="font-weight: var(--wix-font-weight-bold);">Login</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: brightness(0) invert(1);"></button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem;">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" required style="background-color: #333; border: 1px solid #444; color: #E0E0E0; border-radius: 5px;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" required style="background-color: #333; border: 1px solid #444; color: #E0E0E0; border-radius: 5px;">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none;">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <!-- Video Section -->
+        <div class="container video-container my-4">
+            <video width="100%" height="auto" controls autoplay loop muted>
+                <source src="video/videoplayback.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Real-Time Vehicle Tracking Section -->
+        <div class="container tracking-container my-4">
+            <h2 class="text-center">Real-Time Vehicle Tracking</h2>
+            <p class="text-center">Track vehicles in real-time and check their accessibility status.</p>
+            <div id="map"></div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="container featurette">
+            <h2 class="text-center">Accessibility Features</h2>
+            <div class="row">
+                <div class="col-md-6 accessibility-feature">
+                    <img src="pics/visual.png" alt="Visual Impairment">
+                    <div>
+                        <h4>Visual Impairment</h4>
+                        <p>Accessible routes and real-time updates for visually impaired passengers.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 accessibility-feature">
+                    <img src="pics/hearing.png" alt="Hearing Impairment">
+                    <div>
+                        <h4>Hearing Impairment</h4>
+                        <p>Alerts and notifications designed for passengers with hearing impairments.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 accessibility-feature">
+                    <img src="pics/motor.png" alt="Motor Impairment">
+                    <div>
+                        <h4>Motor Impairment</h4>
+                        <p>Easy boarding options for passengers with motor impairments.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 accessibility-feature">
+                    <img src="pics/cognitive.png" alt="Cognitive Impairment">
+                    <div>
+                        <h4>Cognitive Impairment</h4>
+                        <p>Simple and clear instructions for passengers with cognitive impairments.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2023 Your Company | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </footer>
+
+      <!-- Accessibility Settings Modal -->
+<div class="modal fade" id="accessibilitySettingsModal" tabindex="-1" aria-labelledby="accessibilitySettingsLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #1f1f1f; color: #E0E0E0; border-radius: 10px; border: none; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);">
+            <div class="modal-header" style="border-bottom: 1px solid #444;">
+                <h5 class="modal-title" id="accessibilitySettingsLabel" style="font-weight: var(--wix-font-weight-bold);">Accessibility Settings</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: brightness(0) invert(1);"></button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem;">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="" id="highContrastMode" style="background-color: #333; border: 1px solid #444;">
+                    <label class="form-check-label" for="highContrastMode" style="color: #E0E0E0;">
+                        Enable High Contrast Mode
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="" id="increaseFontSize" style="background-color: #333; border: 1px solid #444;">
+                    <label class="form-check-label" for="increaseFontSize" style="color: #E0E0E0;">
+                        Increase Font Size
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid #444;">
+                <button type="button" class="btn btn-primary" style="background-color: #007bff; border: none;">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script>
+            // Initialize Map
+            var map = L.map('map').setView([51.505, -0.09], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add marker for demo
+            var marker = L.marker([51.5, -0.09]).addTo(map);
+
+            // Text-to-Speech functionality
+            let synth = window.speechSynthesis;
+            let utterance;
+
+            function startSpeech() {
+                const textToRead = document.body.innerText; // Reads the entire body content
+                utterance = new SpeechSynthesisUtterance(textToRead);
+                utterance.pitch = 1;
+                utterance.rate = 1;
+                synth.speak(utterance);
+            }
+
+            function stopSpeech() {
+                if (synth.speaking) {
+                    synth.cancel();  // Stops the current speech
+                }
+            }
+
+            // Emergency Assistance Function
+            function callEmergency() {
+                alert("Emergency assistance has been called!");
+            }
+
+            // Handle Login Submission
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+                event.preventDefault();  // Prevent the form from submitting the traditional way
+
+                // Simple login simulation for demo purposes
+                alert("Login successful!");
+                var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                loginModal.hide();  // Hide the modal after login
+            });
+
+            // Accessibility Settings
+            document.getElementById('highContrastMode').addEventListener('change', function(event) {
+                document.body.style.backgroundColor = event.target.checked ? '#000000' : '#121212';
+                document.body.style.color = event.target.checked ? '#FFFFFF' : '#E0E0E0';
+            });
+
+            document.getElementById('increaseFontSize').addEventListener('change', function(event) {
+                document.body.style.fontSize = event.target.checked ? '18px' : '14px';
+            });
+        </script>
+    </body>
+</html>

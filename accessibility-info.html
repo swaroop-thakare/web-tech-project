@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility Information</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        :root {
+            --rem: 16;
+            --wix-font-stack: Madefor, "Helvetica Neue", Helvetica, Arial, "メイリオ", meiryo, "ヒラギノ角ゴ pro w3", hiragino kaku gothic pro, sans-serif;
+            --wix-font-weight-regular: 400;
+            --wix-font-weight-medium: 530;
+            --wix-font-weight-bold: 700;
+            --wix-font-weight-xbold: 800;
+        }
+
+        body {
+            font-family: var(--wix-font-stack);
+            font-weight: var(--wix-font-weight-regular);
+            background-color: #121212;
+            color: #E0E0E0;
+            font-size: 14px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .navbar {
+            background-color: #1f1f1f;
+            font-weight: var(--wix-font-weight-bold);
+        }
+
+        .navbar-brand, .nav-link {
+            color: #E0E0E0 !important;
+        }
+
+        .navbar .nav-link.active {
+            color: #007bff !important;
+            font-weight: var(--wix-font-weight-bold);
+        }
+
+        .info-container {
+            padding: 3rem 1rem;
+        }
+
+        .feature-box {
+            padding: 2rem;
+            background-color: #181818;
+            border: 1px solid #333;
+            border-radius: 0.5rem;
+            color: #E0E0E0;
+        }
+
+        .feature-box h2 {
+            color: #E0E0E0;
+            font-weight: var(--wix-font-weight-bold);
+        }
+
+        .feature-box p {
+            color: #B0B0B0;
+        }
+
+        .feature-box img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        #map {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #333;
+            border-radius: 0.5rem;
+        }
+
+        footer {
+            font-weight: var(--wix-font-weight-xbold);
+            background-color: #000;
+            color: #E0E0E0;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Text-to-Speech Controls */
+        .tts-controls {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tts-controls button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Transport Info</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="route-planner.html">Route Planner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="accessibility-info.html">Accessibility Info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="bus-routes.html">Bus Routes</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Text-to-Speech Controls at the Top -->
+    <div class="tts-controls">
+        <button class="btn btn-primary" onclick="startSpeech()">Start Text-to-Speech</button>
+        <button class="btn btn-secondary" onclick="stopSpeech()">Stop Text-to-Speech</button>
+    </div>
+
+    <!-- Accessibility Information -->
+    <div class="container info-container">
+        <h1 class="text-center">Accessibility Information</h1>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <h2>Wheelchair Accessibility</h2>
+                    <img src="pics/wheel chair.png" alt="Wheelchair Accessibility">
+                    <p>Find detailed information on wheelchair-accessible routes and vehicles. Ensure your journey is comfortable and accessible.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <h2>High-Contrast Maps</h2>
+                    <p>Explore maps designed with high contrast for users with low vision. The maps are optimized for better visibility and usability.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <h2>Text Summaries</h2>
+                    <p>Complex travel information summarized for cognitive accessibility. Easily understand travel details with simplified text summaries.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-Time Map Section -->
+        <div class="container my-4">
+            <h2 class="text-center">Accessible Routes Map</h2>
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 bg-dark text-light">
+        <p>&copy; 2024 Public Transportation Info. All Rights Reserved.</p>
+        <p><a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        // Initialize map
+        var map = L.map('map').setView([51.505, -0.09], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Example marker for demonstration
+        L.marker([51.5, -0.09]).addTo(map)
+            .bindPopup('Accessible Route Example')
+            .openPopup();
+
+        // Text-to-Speech functionality
+        let synth = window.speechSynthesis;
+        let utterance;
+
+        function startSpeech() {
+            const textToRead = document.body.innerText; // Reads the entire body content
+            utterance = new SpeechSynthesisUtterance(textToRead);
+            utterance.pitch = 1;
+            utterance.rate = 1;
+            synth.speak(utterance);
+        }
+
+        function stopSpeech() {
+            if (synth.speaking) {
+                synth.cancel();  // Stops the current speech
+            }
+        }
+
+        // Emergency Assistance Function
+        function callEmergency() {
+            alert("Emergency assistance has been called!");
+        }
+
+        // Accessibility Settings
+        document.getElementById('highContrastMode').addEventListener('change', function(event) {
+            document.body.style.backgroundColor = event.target.checked ? '#000000' : '#121212';
+            document.body.style.color = event.target.checked ? '#FFFFFF' : '#E0E0E0';
+        });
+
+        document.getElementById('increaseFontSize').addEventListener('change', function(event) {
+            document.body.style.fontSize = event.target.checked ? '18px' : '14px';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+/* General Styles */
+:root {
+    --rem: 16;
+    --wix-font-stack: Madefor, "Helvetica Neue", Helvetica, Arial, "メイリオ", meiryo, "ヒラギノ角ゴ pro w3", hiragino kaku gothic pro, sans-serif;
+    --wix-font-weight-regular: 400;
+    --wix-font-weight-medium: 530;
+    --wix-font-weight-bold: 700;
+    --wix-font-weight-xbold: 800;
+}
+
+body {
+    font-family: var(--wix-font-stack);
+    font-weight: var(--wix-font-weight-regular);
+    background-color: #121212;
+    color: #E0E0E0;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+.navbar {
+    background-color: #1f1f1f;
+    font-weight: var(--wix-font-weight-bold);
+}
+
+.navbar-brand, .nav-link {
+    color: #E0E0E0 !important;
+}
+
+.nav-link:hover {
+    color: #ffdd57 !important;
+}
+
+.jumbotron {
+    background-color: #1f1f1f;
+    color: #E0E0E0;
+    padding: 2rem 1rem;
+    text-align: center;
+    font-weight: var(--wix-font-weight-medium);
+    border-bottom: 3px solid #007bff;
+    margin-bottom: 0;
+}
+
+.featurette {
+    padding: 3rem 0;
+    background-color: #181818;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.feature-box {
+    padding: 2rem;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.featurette h2 {
+    color: #E0E0E0;
+    font-weight: var(--wix-font-weight-bold);
+}
+
+.featurette p {
+    color: #B0B0B0;
+}
+
+.featurette img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
+}
+
+.image-container img, .video-container video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Forms */
+input, select, textarea {
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    font-family: var(--wix-font-stack);
+    font-weight: var(--wix-font-weight-regular);
+    background-color: #2c2c2c;
+    color: #E0E0E0;
+    border: 1px solid #555;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+button {
+    background-color: #007bff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    color: white;
+    font-size: 1rem;
+    font-family: var(--wix-font-stack);
+    font-weight: var(--wix-font-weight-medium);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+    font-family: var(--wix-font-stack);
+    font-weight: var(--wix-font-weight-regular);
+}

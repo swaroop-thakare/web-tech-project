@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Public Transportation Info</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #E0E0E0;
+            font-family: Madefor, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .register-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
+        }
+
+        .register-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control, .btn-primary {
+            background-color: #333;
+            border-color: #444;
+            color: #E0E0E0;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004494;
+        }
+
+        footer {
+            font-weight: bold;
+            background-color: #000;
+            color: #E0E0E0;
+            padding: 2rem 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <h2>Sign Up</h2>
+        <form id="registerForm">
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </div>
+            <div class="text-center mt-3">
+                <p>Already have an account? <a href="login.html" class="text-light">Login</a></p>
+            </div>
+        </form>
+    </div>
+
+    <footer class="text-center py-4 bg-dark text-light">
+        <p>&copy; 2024 Public Transportation Info. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript and Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert("Registration successful! You can now log in.");
+            window.location.href = "login.html";
+        });
+    </script>
+</body>
+</html>
