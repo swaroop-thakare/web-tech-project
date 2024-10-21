@@ -7,6 +7,7 @@ function triggerVoiceAlert(message) {
     window.speechSynthesis.speak(speech);
 }
 
+
 /* Example: Trigger a voice alert when the page loads */
 window.onload = function() {
     triggerVoiceAlert('Welcome to Public Transportation Info. Get updates on schedule changes or delays with real-time voice alerts.');
