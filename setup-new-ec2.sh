@@ -1,13 +1,17 @@
 #!/bin/bash
 
-# EC2 Deployment Script for Web Tech Project
-# This script sets up the environment and deploys the application
+# New EC2 Instance Setup Script
+# This script sets up a fresh EC2 instance with git repository
 
-echo "Starting EC2 deployment..."
+echo "Setting up new EC2 instance..."
 
 # Update system packages
 echo "Updating system packages..."
 sudo yum update -y
+
+# Install Git first
+echo "Installing Git..."
+sudo yum install -y git
 
 # Install Node.js and npm
 echo "Installing Node.js..."
@@ -29,10 +33,6 @@ sudo systemctl enable httpd
 sudo systemctl start mysqld
 sudo systemctl enable mysqld
 
-# Install Git
-echo "Installing Git..."
-sudo yum install -y git
-
 # Install PM2 for Node.js process management
 echo "Installing PM2..."
 sudo npm install -g pm2
@@ -42,25 +42,13 @@ echo "Setting up application directory..."
 sudo mkdir -p /var/www/web-tech-project
 sudo chown -R ec2-user:ec2-user /var/www/web-tech-project
 
-# Clone or initialize git repository
-echo "Setting up git repository..."
+# Clone repository from GitHub
+echo "Cloning repository from GitHub..."
 cd /var/www/web-tech-project
-
-# Check if this is a fresh instance or if we should clone from remote
-if [ -d ".git" ]; then
-    echo "Git repository already exists, pulling latest changes..."
-    git pull origin main
-else
-    echo "Initializing new git repository..."
-    git init
-    git remote add origin https://github.com/swaroop-thakare/web-tech-project.git
-    git fetch origin
-    git checkout -b main origin/main
-fi
+git clone https://github.com/swaroop-thakare/web-tech-project.git .
 
 # Install Node.js dependencies
 echo "Installing Node.js dependencies..."
-cd /var/www/web-tech-project
 npm install
 
 # Configure Apache virtual host
@@ -107,7 +95,18 @@ sudo firewall-cmd --permanent --add-service=http
 sudo firewall-cmd --permanent --add-service=https
 sudo firewall-cmd --reload
 
-echo "Deployment completed!"
+# Set up git configuration for the server
+echo "Setting up git configuration..."
+git config --global user.name "EC2 Server"
+git config --global user.email "server@ec2.local"
+
+echo "New EC2 instance setup completed!"
 echo "Your application should be accessible at: http://your-ec2-public-ip"
 echo "Node.js API is running on port 3000"
 echo "Apache is serving PHP files from the root directory"
+echo ""
+echo "Next steps:"
+echo "1. Configure database: sudo mysql_secure_installation"
+echo "2. Create database and user"
+echo "3. Set up environment variables: cp env.example .env"
+echo "4. Update config.php with database credentials"

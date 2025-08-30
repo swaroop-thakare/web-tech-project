@@ -12,18 +12,29 @@
 ssh -i your-key.pem ec2-user@your-ec2-public-ip
 ```
 
-## 3. Upload Project Files
+## 3. Setup New EC2 Instance (Choose One Option)
+
+### Option A: Clone from Repository (Recommended for new instances)
 ```bash
-# From your local machine
-scp -i your-key.pem -r /Users/swaroopthakare/HPE/web-tech-project ec2-user@your-ec2-public-ip:~/
+# On EC2 instance - download and run setup script
+curl -O https://raw.githubusercontent.com/swaroop-thakare/web-tech-project/main/setup-new-ec2.sh
+chmod +x setup-new-ec2.sh
+./setup-new-ec2.sh
 ```
 
-## 4. Run Deployment
+### Option B: Manual Setup
 ```bash
 # On EC2 instance
+git clone https://github.com/swaroop-thakare/web-tech-project.git
 cd web-tech-project
 chmod +x deploy.sh
 ./deploy.sh
+```
+
+### Option C: Upload via SCP (Alternative)
+```bash
+# From your local machine
+scp -i your-key.pem -r /Users/swaroopthakare/HPE/web-tech-project ec2-user@your-ec2-public-ip:~/
 ```
 
 ## 5. Setup Database
